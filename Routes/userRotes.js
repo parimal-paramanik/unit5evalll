@@ -52,7 +52,7 @@ userRouter.post("/login",async(req,res)=>{
 userRouter.post("/refresh",async(req,res)=>{
     try {
          const token=req.headers.authorization.split(' ')[1]
-         const BlacklistData=await BlackModel.find({token})
+         const BlacklistData=await BlackModel.findOne({token})
          if(!token || BlacklistData){
             res.send({msg:"please login first"})
          }else{
