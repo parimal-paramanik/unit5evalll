@@ -4,9 +4,11 @@ app.use(express.json())
 
 const {connection}=require("./config/db")
 
+const {userRouter}=require("./Routes/userRotes")
 app.get("/",(req,res)=>{
     res.send("everything is fine")
 })
+app.use("/user",userRouter)
 const port=process.env.PORT
 app.listen(port,async()=>{
     try {

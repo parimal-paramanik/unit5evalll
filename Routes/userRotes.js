@@ -17,6 +17,7 @@ userRouter.post("/signup",async(req,res)=>{
             if(err){
                 res.send({msg:err.message})
             }
+
             const user= new userModel({name,email,role,password:hash})
             await user.save()
             res.send("new user is registed succesfully")
@@ -36,6 +37,7 @@ userRouter.post("/login",async(req,res)=>{
                 if(result){
                     const token=jwt.sign({username:user.name,userId:user._id,role:user.role},process.env.tokenkey, {expiresIn:"1m"})
                     const reftoken=jwt.sign({username:user.name,userId:user._id,role:user.role},process.env.refkey, {expiresIn:"3m"})
+                    res.send({"msg":"login done","token":token,"reftoke":reftoken})
                 }
             })
         }else{
@@ -79,3 +81,4 @@ userRouter.get("/logout",async(req,res)=>{
         
     }
 })
+module.exports={userRouter}
