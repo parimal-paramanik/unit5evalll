@@ -56,7 +56,7 @@ blogRoute.get("/read/:id",authenticator,async(req,res)=>{
   })
 
  
-blogRoute.put("/update/:id",authenticator,AuthPower(["moderator","user"]),async(req,res)=>{
+blogRoute.put("/update/:id",authenticator,async(req,res)=>{
    
     try {
         const updatedPost= await blogModel.findByIdAndUpdate({_id:req.params.id},req.body)
