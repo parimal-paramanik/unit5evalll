@@ -8,8 +8,13 @@ const userSchema=mongoose.Schema({
     enum:["user"], default:"user"}
 })
 
+const blackShema=mongoose.Schema({
+    token:{type:String}
+})
 
 
 const userModel=mongoose.model("user",userSchema)
+const BlackModel=mongoose.model("black",blackShema)
 
-module.exports={userModel}
+
+module.exports={userModel,BlackModel}

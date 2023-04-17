@@ -2,9 +2,10 @@ const express=require("express")
 
 const userRouter=express.Router()
 userRouter.use(express.json())
-const {userModel}=require("../Model/userModel")
+const {userModel,BlackModel}=require("../Model/userModel")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
+
 userRouter.post("/signup",async(req,res)=>{
     try {
         const {email,name,password,role}=req.body
@@ -47,5 +48,34 @@ userRouter.post("/login",async(req,res)=>{
 })
 
 userRouter.post("/refresh",async(req,res)=>{
-    
+    try {
+         const token=req.headers.authorization.split(' ')[1]
+         const BlacklistData=await BlackModel.find({token})
+         if(!token || BlacklistData){
+            res.send({msg:"please login first"})
+         }else{
+            jwt.verify(token,process.env.refkey,(err,decode)=>{
+                if(err){
+                    res.send({msg:"please login first"})
+                }else{
+                    const token=jwt.sign({userId:decode.userId},process.env.tokenkey,{expiresIn:"3m"})
+                    res.send({msg:"login succes","token":token})
+                }
+            })
+         }
+    } catch (error) {
+        res.send({msg:error.message})
+    }
+})
+userRouter.get("/logout",async(req,res)=>{
+    try {
+        const token=req.headers.authorization.split(' ')[1]
+        if(token){
+            const revokePerson=new BlackModel({token})
+            await revokePerson.save()
+            res.send("logout is successfull")
+        }
+    } catch (error) {
+        
+    }
 })
