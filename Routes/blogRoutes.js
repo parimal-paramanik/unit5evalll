@@ -5,8 +5,10 @@ blogRoute.use(express.json())
 const {blogModel}=require("../Model/blogModel")
 const {authenticator}=require("../authMiddle/authMiddle")
 const {AuthPower}=require("../authMiddle/authoriseMiddle")
+
+
 //create a new post
-blogRoute.post("/post",async(req,res)=>{
+blogRoute.post("/post",authenticator,async(req,res)=>{
    try {
     const {title,topic,media}=req.body
     const newPost= new blogModel(req.body)
@@ -44,7 +46,7 @@ blogRoute.get("/read",authenticator,async(req,res)=>{
 })
 
 //get a particular post by id 
-blogRoute.get("/read/:id",async(req,res)=>{
+blogRoute.get("/read/:id",authenticator,async(req,res)=>{
     try {
        const post= await blogModel.findOne({_id:req.params.id})
        res.send(post)
@@ -53,9 +55,9 @@ blogRoute.get("/read/:id",async(req,res)=>{
     }
   })
 
-//update a particular post by id 
-blogRoute.put("/update/:id",AuthPower(["moderator"]),async(req,res)=>{
-    // res.send("new post created ")
+ 
+blogRoute.put("/update/:id",authenticator,AuthPower(["moderator","user"]),async(req,res)=>{
+   
     try {
         const updatedPost= await blogModel.findByIdAndUpdate({_id:req.params.id},req.body)
          res.send("post updated successfully")
@@ -65,9 +67,7 @@ blogRoute.put("/update/:id",AuthPower(["moderator"]),async(req,res)=>{
 })
 
 
-
-//delete a post by it's id 
-blogRoute.delete("/delete/:id",AuthPower(["moderator"]),async(req,res)=>{
+blogRoute.delete("/delete/:id",authenticator,AuthPower(["moderator"]),async(req,res)=>{
    try {
     const deletepost= await blogModel.findByIdAndDelete({_id:req.params.id},req.body)
     res.send("post deleted")

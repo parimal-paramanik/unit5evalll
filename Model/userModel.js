@@ -5,7 +5,7 @@ const userSchema=mongoose.Schema({
     email:{type:String,required:true},
     password:{type:String,required:true},
     role:{type:String,
-    enum:["user"], default:"user"}
+    enum:["user","moderator"], default:"user"}
 })
 
 const blackShema=mongoose.Schema({

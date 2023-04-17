@@ -6,8 +6,6 @@ const blogSchema=mongoose.Schema({
     description:{type:String},
 })
 
-
-
 const blogModel=mongoose.model("blog",blogSchema)
 
 module.exports={blogModel}
