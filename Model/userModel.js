@@ -8,6 +8,8 @@ const userSchema=mongoose.Schema({
     enum:["user"], default:"user"}
 })
 
+
+
 const userModel=mongoose.model("user",userSchema)
 
 module.exports={userModel}
