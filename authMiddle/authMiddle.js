@@ -6,19 +6,18 @@ require("dotenv").config()
 
 const authenticator=async(req,res,next)=>{
     try {
-        const token=req.headers.authorization.split(' ')[1]
-        if(!token){
+         const token=req.headers.authorization.split(' ')[1]
+        //  console.log(token)
+         if(!token){
             res.send({msg:"please login first"})
-        }
-        const Isvalid=jwt.verify(token,process.env.tokenkey)
-        req.body.role=Isvalid.role
+         }
+         const IsValid= jwt.verify(token,process.env.tokenkey)
+         req.body.role=IsValid.role
 
-        if(!Isvalid){
-            return res.send({msg:"please login again"})
-            next()
-        }
+         if(!IsValid) return res.send({msg:"please login agin"}) 
+         next()
     } catch (error) {
-        res.send({"msg":error.message})
+        res.send(error.message)
     }
 }
 

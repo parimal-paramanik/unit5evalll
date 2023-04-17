@@ -5,10 +5,14 @@ app.use(express.json())
 const {connection}=require("./config/db")
 
 const {userRouter}=require("./Routes/userRotes")
+ const {blogRoute}=require("./Routes/blogRoutes")
+ 
 app.get("/",(req,res)=>{
     res.send("everything is fine")
 })
 app.use("/user",userRouter)
+app.use("/blog",blogRoute)
+
 const port=process.env.PORT
 app.listen(port,async()=>{
     try {
